@@ -161,9 +161,9 @@ type dockerContainer struct {
 	// ID is the docker container ID.
 	ID string `json:"ID"`
 	// Image is the docker image name.
-	Image string `json:"Image"`
+	Image string `json:"IMAGE"`
 	// Names is the docker container name.
-	Names string `json:"Names"`
+	Names string `json:"NAMES"`
 }
 
 // countDockerContainers records the metric for the current number of docker containers.
@@ -186,7 +186,7 @@ func countDockerContainers(ctx context.Context) {
 // listDockerContainers returns the current running play_run containers reported by docker.
 func listDockerContainers(ctx context.Context) ([]dockerContainer, error) {
 	out := new(bytes.Buffer)
-	cmd := exec.Command("docker", "ps", "--quiet", "--filter", "name=play_run_", "--format", "{{json .}}")
+	cmd := exec.Command("docker", "ps", "--filter", "name=play_run_", "--format", "json")
 	cmd.Stdout, cmd.Stderr = out, out
 	if err := cmd.Start(); err != nil {
 		return nil, fmt.Errorf("listDockerContainers: cmd.Start() failed: %w", err)
